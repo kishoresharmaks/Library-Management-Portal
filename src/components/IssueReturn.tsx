@@ -23,16 +23,46 @@ function IssueReturn() {
   const { students, loading: studentsLoading } = useStudents();
   const { addTransaction } = useTransactions();
   
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [bookSearchQuery, setBookSearchQuery] = useState('');
   const [studentSearchQuery, setStudentSearchQuery] = useState('');
   const [isIssuing, setIsIssuing] = useState(true);
-  const [dueDate, setDueDate] = useState(() => {
+  const [dueDate, setDueDate] = useState('');
+  const [defaultReturnDays, setDefaultReturnDays] = useState(15);
+  const [loadingSettings, setLoadingSettings] = useState(true);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  useEffect(() => {
+    // Update due date when defaultReturnDays changes
     const date = new Date();
-    date.setDate(date.getDate() + 15);
-    return date.toISOString().split('T')[0];
-  });
+    date.setDate(date.getDate() + defaultReturnDays);
+    setDueDate(date.toISOString().split('T')[0]);
+  }, [defaultReturnDays]);
+
+  const fetchSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('default_return_days')
+        .single();
+
+      if (error) {
+        if (error.code !== 'PGRST116') { // Ignore if no data exists
+          throw error;
+        }
+      } else if (data) {
+        setDefaultReturnDays(data.default_return_days);
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    } finally {
+      setLoadingSettings(false);
+    }
+  };
 
   // Filter books based on search query and availability
   const availableBooks = books.filter(book => 
@@ -50,7 +80,7 @@ function IssueReturn() {
   // Filter active students based on search query
   const activeStudents = students.filter(student => 
     student.status === 'active' && 
-    (student.name.toLowerCase().includes(studentSearchQuery.toLowerCase()) ||
+    (student.name?.toLowerCase().includes(studentSearchQuery.toLowerCase()) ||
      student.reg_number.toLowerCase().includes(studentSearchQuery.toLowerCase()))
   );
 
@@ -140,8 +170,7 @@ function IssueReturn() {
     }
   };
 
-  // Loading state
-  if (booksLoading || studentsLoading) {
+  if (booksLoading || studentsLoading || loadingSettings) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Loader2 className="h-10 w-10 animate-spin text-emerald-600" />
@@ -273,11 +302,6 @@ function IssueReturn() {
                         <span className="px-2 py-1 rounded-md bg-gray-100 text-gray-700">
                           Access No: {book.isbn}
                         </span>
-                        {book.category && (
-                          <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-800">
-                            {book.category}
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -498,7 +522,7 @@ function IssueReturn() {
                 </div>
                 <div className="flex items-center text-xs text-emerald-700 ml-2">
                   <Clock className="h-3 w-3 mr-1" />
-                  <span>15 days default</span>
+                  <span>{defaultReturnDays} days default</span>
                 </div>
               </div>
             )}

@@ -1,17 +1,45 @@
 import React, { useState, useMemo } from 'react';
-import { Download, Upload, Plus, Loader2, Search, Trash2, Edit, X, UserPlus, Phone, Mail, MapPin } from 'lucide-react';
-import { useStudents } from '../hooks/useSupabase';
+import { 
+  Download, 
+  Upload, 
+  Plus, 
+  Loader2, 
+  Search, 
+  Edit, 
+  X, 
+  UserPlus, 
+  Phone, 
+  Mail, 
+  MapPin,
+  GraduationCap,
+  Building2,
+  Users,
+  UserCheck,
+  UserX,
+  Filter,
+  SortAsc,
+  SortDesc,
+  ChevronDown,
+  BookOpen,
+  Clock
+} from 'lucide-react';
+import { useStudents, useTransactions } from '../hooks/useSupabase';
 import { Student } from '../types/database';
 import toast from 'react-hot-toast';
 
 function StudentsManagement() {
   const { students, loading, addStudent, updateStudent } = useStudents();
+  const { transactions, loading: transactionsLoading } = useTransactions();
   const [isAddingStudent, setIsAddingStudent] = useState(false);
   const [isEditingStudent, setIsEditingStudent] = useState<Student | null>(null);
+  const [viewingStudent, setViewingStudent] = useState<Student | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchBy, setSearchBy] = useState<'reg_number' | 'name' | 'department' | 'section'>('name');
   const [filterYear, setFilterYear] = useState<number | ''>('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive' | 'graduated'>('all');
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState<'name' | 'reg_number' | 'department'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   
   const [newStudent, setNewStudent] = useState({
     reg_number: '',
@@ -26,23 +54,54 @@ function StudentsManagement() {
     status: 'active' as const
   });
 
-  const filteredStudents = useMemo(() => {
-    return students.filter(student => {
-      const matchesSearch = searchQuery
-        ? student[searchBy].toLowerCase().includes(searchQuery.toLowerCase())
-        : true;
-      
-      const matchesYear = filterYear
-        ? student.year === filterYear
-        : true;
-      
-      const matchesStatus = filterStatus === 'all'
-        ? true
-        : student.status === filterStatus;
+  // Calculate student statistics
+  const stats = useMemo(() => {
+    const total = students.length;
+    const active = students.filter(s => s.status === 'active').length;
+    const inactive = students.filter(s => s.status === 'inactive').length;
+    const graduated = students.filter(s => s.status === 'graduated').length;
 
-      return matchesSearch && matchesYear && matchesStatus;
-    });
-  }, [students, searchQuery, searchBy, filterYear, filterStatus]);
+    // Calculate department distribution
+    const departments = students.reduce((acc, student) => {
+      const dept = student.department || 'Unknown';
+      acc[dept] = (acc[dept] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return { total, active, inactive, graduated, departments };
+  }, [students]);
+
+  // Get student borrowing history
+  const getStudentTransactions = (studentId: string) => {
+    return transactions.filter(t => t.student_id === studentId);
+  };
+
+  const filteredStudents = useMemo(() => {
+    return students
+      .filter(student => {
+        const matchesSearch = searchQuery
+          ? student[searchBy]?.toLowerCase().includes(searchQuery.toLowerCase())
+          : true;
+        
+        const matchesYear = filterYear
+          ? student.year === filterYear
+          : true;
+        
+        const matchesStatus = filterStatus === 'all'
+          ? true
+          : student.status === filterStatus;
+
+        return matchesSearch && matchesYear && matchesStatus;
+      })
+      .sort((a, b) => {
+        let compareValue = 0;
+        const aValue = a[sortBy] || '';
+        const bValue = b[sortBy] || '';
+        
+        compareValue = aValue.localeCompare(bValue);
+        return sortOrder === 'asc' ? compareValue : -compareValue;
+      });
+  }, [students, searchQuery, searchBy, filterYear, filterStatus, sortBy, sortOrder]);
 
   const handleAddStudent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,7 +203,7 @@ function StudentsManagement() {
   };
 
   const handleExportCSV = () => {
-    const headers = ['Registration Number', 'Name', 'Department', 'Section', 'Year', 'Semester', 'Contact Number', 'Contact Info',  'Status'];
+    const headers = ['Registration Number', 'Name', 'Department', 'Section', 'Year', 'Semester', 'Contact Number', 'Contact Info', 'Email', 'Status'];
     const csvContent = [
       headers.join(','),
       ...students.map(student => [
@@ -156,6 +215,7 @@ function StudentsManagement() {
         student.semester,
         student.contact_number,
         student.contact_info,
+        student.email,
         student.status
       ].join(','))
     ].join('\n');
@@ -169,7 +229,7 @@ function StudentsManagement() {
     window.URL.revokeObjectURL(url);
   };
 
-  if (loading) {
+  if (loading || transactionsLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -179,6 +239,58 @@ function StudentsManagement() {
 
   return (
     <div className="space-y-6">
+      {/* Header with Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Total Students</p>
+              <p className="text-2xl font-semibold text-gray-900">{stats.total}</p>
+            </div>
+            <div className="p-3 bg-blue-100 rounded-full">
+              <Users className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Active Students</p>
+              <p className="text-2xl font-semibold text-green-600">{stats.active}</p>
+            </div>
+            <div className="p-3 bg-green-100 rounded-full">
+              <UserCheck className="h-6 w-6 text-green-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Inactive Students</p>
+              <p className="text-2xl font-semibold text-yellow-600">{stats.inactive}</p>
+            </div>
+            <div className="p-3 bg-yellow-100 rounded-full">
+              <UserX className="h-6 w-6 text-yellow-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Graduated</p>
+              <p className="text-2xl font-semibold text-purple-600">{stats.graduated}</p>
+            </div>
+            <div className="p-3 bg-purple-100 rounded-full">
+              <GraduationCap className="h-6 w-6 text-purple-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
         <h2 className="text-lg font-semibold text-gray-900">Students Management</h2>
         <div className="flex flex-wrap gap-4">
@@ -209,9 +321,10 @@ function StudentsManagement() {
         </div>
       </div>
 
+      {/* Search and Filters */}
       <div className="bg-white p-4 rounded-lg shadow">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="relative">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+          <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
@@ -220,48 +333,105 @@ function StudentsManagement() {
               placeholder="Search students..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          <div>
-            <select
-              value={searchBy}
-              onChange={(e) => setSearchBy(e.target.value as typeof searchBy)}
-              className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            >
-              <option value="name">Search by Name</option>
-              <option value="reg_number">Search by Reg. Number</option>
-              <option value="department">Search by Department</option>
-              <option value="section">Search by Section</option>
-            </select>
-          </div>
-          <div>
-            <select
-              value={filterYear}
-              onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value) : '')}
-              className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            >
-              <option value="">All Years</option>
-              {[1, 2, 3, 4].map(year => (
-                <option key={year} value={year}>Year {year}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
-              className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="graduated">Graduated</option>
-            </select>
-          </div>
+          
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors"
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            Filters
+            <ChevronDown className={`h-4 w-4 ml-2 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+          </button>
         </div>
+
+        {showFilters && (
+          <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label htmlFor="search-by" className="block text-sm font-medium text-gray-700 mb-1">
+                Search By
+              </label>
+              <select
+                id="search-by"
+                value={searchBy}
+                onChange={(e) => setSearchBy(e.target.value as typeof searchBy)}
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              >
+                <option value="name">Name</option>
+                <option value="reg_number">Registration Number</option>
+                <option value="department">Department</option>
+                <option value="section">Section</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="filter-year" className="block text-sm font-medium text-gray-700 mb-1">
+                Year
+              </label>
+              <select
+                id="filter-year"
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value) : '')}
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              >
+                <option value="">All Years</option>
+                {[1, 2, 3, 4].map(year => (
+                  <option key={year} value={year}>Year {year}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="filter-status" className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                id="filter-status"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="graduated">Graduated</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="sort-by" className="block text-sm font-medium text-gray-700 mb-1">
+                Sort By
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <select
+                  id="sort-by"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                  className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                >
+                  <option value="name">Name</option>
+                  <option value="reg_number">Registration Number</option>
+                  <option value="department">Department</option>
+                </select>
+                <button
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors"
+                >
+                  {sortOrder === 'asc' ? (
+                    <SortAsc className="h-5 w-5" />
+                  ) : (
+                    <SortDesc className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* Student Forms */}
       {isAddingStudent && (
         <div className="bg-white p-6 rounded-lg shadow mb-6">
           <div className="flex justify-between items-center mb-4">
@@ -446,7 +616,7 @@ function StudentsManagement() {
               <input
                 type="text"
                 id="edit-name"
-                value={isEditingStudent.name}
+                value={isEditingStudent.name || ''}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, name: e.target.value })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
@@ -459,7 +629,7 @@ function StudentsManagement() {
               <input
                 type="text"
                 id="edit-department"
-                value={isEditingStudent.department}
+                value={isEditingStudent.department || ''}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, department: e.target.value })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
@@ -472,7 +642,7 @@ function StudentsManagement() {
               <input
                 type="text"
                 id="edit-section"
-                value={isEditingStudent.section}
+                value={isEditingStudent.section || ''}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, section: e.target.value })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
@@ -484,7 +654,7 @@ function StudentsManagement() {
               </label>
               <select
                 id="edit-year"
-                value={isEditingStudent.year}
+                value={isEditingStudent.year || 1}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, year: parseInt(e.target.value) })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               >
@@ -499,7 +669,7 @@ function StudentsManagement() {
               </label>
               <select
                 id="edit-semester"
-                value={isEditingStudent.semester}
+                value={isEditingStudent.semester || 1}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, semester: parseInt(e.target.value) })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               >
@@ -515,7 +685,7 @@ function StudentsManagement() {
               <input
                 type="tel"
                 id="edit-contact_number"
-                value={isEditingStudent.contact_number}
+                value={isEditingStudent.contact_number || ''}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, contact_number: e.target.value })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
@@ -528,7 +698,7 @@ function StudentsManagement() {
               <input
                 type="email"
                 id="edit-email"
-                value={isEditingStudent.email}
+                value={isEditingStudent.email || ''}
                 onChange={(e) => setIsEditingStudent({ ...isEditingStudent, email: e.target.value })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
@@ -568,6 +738,180 @@ function StudentsManagement() {
         </div>
       )}
 
+      {/* Student Details Modal */}
+      {viewingStudent && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Student Details</h3>
+              <button
+                onClick={() => setViewingStudent(null)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Student Information */}
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-2">Personal Information</h4>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-500">Name</p>
+                      <p className="font-medium">{viewingStudent.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Registration Number</p>
+                      <p className="font-medium">{viewingStudent.reg_number}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Status</p>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        viewingStudent.status === 'active'
+                          ? 'bg-green-100 text-green-800'
+                          : viewingStudent.status === 'inactive'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {viewingStudent.status.charAt(0).toUpperCase() + viewingStudent.status.slice(1)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-2">Academic Information</h4>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-500">Department</p>
+                      <p className="font-medium">{viewingStudent.department}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-500">Year</p>
+                        <p className="font-medium">{viewingStudent.year}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Section</p>
+                        <p className="font-medium">{viewingStudent.section}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Semester</p>
+                      <p className="font-medium">{viewingStudent.semester}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-2">Contact Information</h4>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="font-medium">{viewingStudent.contact_number}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="font-medium">{viewingStudent.email}</p>
+                    </div>
+                    {viewingStudent.contact_info && (
+                      <div>
+                        <p className="text-sm text-gray-500">Additional Contact Info</p>
+                        <p className="font-medium">{viewingStudent.contact_info}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Transaction History */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-2">Transaction History</h4>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  {getStudentTransactions(viewingStudent.id).length > 0 ? (
+                    <div className="space-y-4">
+                      {getStudentTransactions(viewingStudent.id).map((transaction) => (
+                        <div
+                          key={transaction.id}
+                          className={`p-3 rounded-lg ${
+                            transaction.status === 'Borrowed'
+                              ? 'bg-yellow-50 border border-yellow-100'
+                              : 'bg-green-50 border border-green-100'
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            {transaction.status === 'Borrowed' ? (
+                              <BookOpen className="h-5 w-5 text-yellow-600 mt-1" />
+                            ) : (
+                              <BookCheck className="h-5 w-5 text-green-600 mt-1" />
+                            )}
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900">
+                                {transaction.book?.name}
+                              </p>
+                              <div className="mt-1 text-sm">
+                                <p className="text-gray-600">
+                                  Borrowed: {new Date(transaction.borrowed_date).toLocaleDateString()}
+                                </p>
+                                {transaction.status === 'Returned' ? (
+                                  <p className="text-green-600">
+                                    Returned: {new Date(transaction.return_date!).toLocaleDateString()}
+                                  </p>
+                                ) : (
+                                  <p className={`${
+                                    new Date(transaction.due_date) < new Date()
+                                      ? 'text-red-600'
+                                      : 'text-yellow-600'
+                                  }`}>
+                                    Due: {new Date(transaction.due_date).toLocaleDateString()}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            {transaction.status === 'Borrowed' && 
+                             new Date(transaction.due_date) < new Date() && (
+                              <div className="px-2 py-1 rounded bg-red-100 text-red-800 text-xs font-medium">
+                                Overdue
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6">
+                      <BookOpen className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-gray-500">No transaction history</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setViewingStudent(null);
+                  setIsEditingStudent(viewingStudent);
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Edit Student
+              </button>
+              <button
+                onClick={() => setViewingStudent(null)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Students List */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -591,14 +935,14 @@ function StudentsManagement() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredStudents.map((student) => (
-                <tr key={student.id}>
+                <tr key={student.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {student.reg_number}
                   </td>
@@ -640,12 +984,18 @@ function StudentsManagement() {
                       {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button
+                      onClick={() => setViewingStudent(student)}
+                      className="text-blue-600 hover:text-blue-900 mr-3"
+                    >
+                      View
+                    </button>
                     <button
                       onClick={() => setIsEditingStudent(student)}
                       className="text-yellow-600 hover:text-yellow-900"
                     >
-                      <Edit className="h-4 w-4" />
+                      Edit
                     </button>
                   </td>
                 </tr>

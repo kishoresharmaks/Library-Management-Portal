@@ -11,7 +11,8 @@ import {
   BookUp,
   AlertCircle,
   MessageSquare,
-  ChevronRight
+  ChevronRight,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useIdleTimer } from '../hooks/useIdleTimer';
@@ -26,6 +27,7 @@ const IssueReturn = lazy(() => import('./IssueReturn'));
 const Overdue = lazy(() => import('./Overdue'));
 const WhatsAppNotifications = lazy(() => import('./WhatsAppNotifications'));
 const StaffTransactions = lazy(() => import('./StaffTransactions'));
+const Settings = lazy(() => import('./Settings'));
 
 // Loader component
 const LoadingFallback = () => (
@@ -75,6 +77,7 @@ function MainApp() {
     { id: 'transactions', name: 'Transactions', icon: RepeatIcon },
     { id: 'overdue', name: 'Overdue Books', icon: AlertCircle },
     { id: 'whatsapp', name: 'WhatsApp Notifications', icon: MessageSquare },
+    { id: 'settings', name: 'Settings', icon: SettingsIcon },
   ], []);
 
   // Debounced window resize handler for performance
@@ -108,7 +111,8 @@ function MainApp() {
       'staff-issue-return': () => import('./StaffTransactions'),
       'transactions': () => import('./Transactions'),
       'overdue': () => import('./Overdue'),
-      'whatsapp': () => import('./WhatsAppNotifications')
+      'whatsapp': () => import('./WhatsAppNotifications'),
+      'settings': () => import('./Settings')
     };
     
     // If we have a preload function for this tab, call it
@@ -142,6 +146,8 @@ function MainApp() {
         return <Overdue />;
       case 'whatsapp':
         return <WhatsAppNotifications />;
+      case 'settings':
+        return <Settings />;
       default:
         return <Dashboard />;
     }
@@ -216,7 +222,7 @@ function MainApp() {
                 {user?.name?.charAt(0)?.toUpperCase() || 'U'}
               </div>
               <div>
-                <h3 className="font-medium text-gray-800">{/*{user?.name || 'User'}*/}Admin User</h3>
+                <h3 className="font-medium text-gray-800">Admin User</h3>
                 <p className="text-xs text-gray-500">{user?.role || 'Staff'}</p>
               </div>
             </div>
