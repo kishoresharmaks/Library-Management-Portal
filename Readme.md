@@ -153,8 +153,15 @@ The Library Management System is a comprehensive solution designed to streamline
 ## 📱 Screenshots
 
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&auto=format&fit=crop&q=90" width="45%" alt="Dashboard">
-  <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=90" width="45%" alt="Book Management">
+  <img src="https://github.com/user-attachments/assets/b0845cff-c8a9-4794-a1db-94cee047cf65" width="50%" alt="Dashboard">
+  <img src="https://github.com/user-attachments/assets/2dd4b814-fd29-4672-b4dd-db254f615274" width="50%" alt="Library Management">
+  <img src="https://github.com/user-attachments/assets/588f1237-823d-416e-a461-231b8238d459" width="50%" alt="Library Management">
+  <img src="https://github.com/user-attachments/assets/3c630441-84de-49d3-b87b-ab2dac435571" width="50%" alt="Library Management">
+  <img src="https://github.com/user-attachments/assets/d1db6b0d-9d0d-4c82-a744-e1e91822ad39" width="50%" alt="Library Management">
+
+
+
+
 </div>
 
 ## 📦 Project Structure
