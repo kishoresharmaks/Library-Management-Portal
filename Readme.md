@@ -48,167 +48,149 @@ The Library Management System is a comprehensive solution designed to streamline
 
 ### 🌟 Why Choose This System?
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;">
-  <div style="flex: 1; min-width: 200px; max-width: 250px; padding: 15px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center;">
-    <div style="flex-shrink: 0; margin-right: 15px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path><path d="M1 21h22"></path><path d="M7 16.5a.5.5 0 0 0-.5.5"></path><path d="M17 16.5a.5.5 0 0 1 .5.5"></path><path d="M7 12h10"></path><path d="M7 8h10"></path></svg>
-    </div>
-    <div>
-      <b>Modern Tech Stack</b>
-      <p style="font-size: 0.9em; margin: 5px 0 0 0; color: #666;">Built with the latest technologies</p>
-    </div>
-  </div>
-  
-  <div style="flex: 1; min-width: 200px; max-width: 250px; padding: 15px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center;">
-    <div style="flex-shrink: 0; margin-right: 15px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-    </div>
-    <div>
-      <b>Real-time Updates</b>
-      <p style="font-size: 0.9em; margin: 5px 0 0 0; color: #666;">Live data synchronization</p>
-    </div>
-  </div>
-  
-  <div style="flex: 1; min-width: 200px; max-width: 250px; padding: 15px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center;">
-    <div style="flex-shrink: 0; margin-right: 15px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-    </div>
-    <div>
-      <b>Mobile Responsive</b>
-      <p style="font-size: 0.9em; margin: 5px 0 0 0; color: #666;">Works on all devices</p>
-    </div>
-  </div>
-  
-  <div style="flex: 1; min-width: 200px; max-width: 250px; padding: 15px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center;">
-    <div style="flex-shrink: 0; margin-right: 15px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-    </div>
-    <div>
-      <b>Secure</b>
-      <p style="font-size: 0.9em; margin: 5px 0 0 0; color: #666;">Industry-standard security</p>
-    </div>
-  </div>
-</div>
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img width="50" src="https://img.icons8.com/color/96/000000/speed.png"/><br/>
+      <b>Modern Tech Stack</b><br/>
+      <small>Built with the latest technologies</small>
+    </td>
+    <td width="50%" align="center">
+      <img width="50" src="https://img.icons8.com/color/96/000000/synchronize.png"/><br/>
+      <b>Real-time Updates</b><br/>
+      <small>Live data synchronization</small>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img width="50" src="https://img.icons8.com/color/96/000000/smartphone-tablet.png"/><br/>
+      <b>Mobile Responsive</b><br/>
+      <small>Works seamlessly on all devices</small>
+    </td>
+    <td width="50%" align="center">
+      <img width="50" src="https://img.icons8.com/color/96/000000/lock--v1.png"/><br/>
+      <b>Secure</b><br/>
+      <small>Implements industry-standard security</small>
+    </td>
+  </tr>
+</table>
 
 ## 🚀 Features
 
-<div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 30px 0;">
-  <!-- Feature Card 1 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #43a047, #66bb6a); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.4 8.64 8.78 18.27l-5.37-5.37"/></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">Interactive Dashboard</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Real-time statistics and metrics</li>
-        <li>Visual data representation</li>
-        <li>Activity monitoring</li>
-        <li>Performance insights</li>
-      </ul>
-    </div>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+
+  <div style="padding: 20px; background-color: #f1f8e9; border-radius: 10px; border-left: 4px solid #8bc34a;">
+    <h3>📊 Interactive Dashboard</h3>
+    <ul>
+      <li>Real-time statistics and metrics</li>
+      <li>Visual data representation</li>
+      <li>Activity monitoring</li>
+      <li>Performance insights</li>
+    </ul>
   </div>
-  
-  <!-- Feature Card 2 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #1976d2, #42a5f5); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">Book Management</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Comprehensive catalog system</li>
-        <li>Advanced search & filtering</li>
-        <li>Bulk operations support</li>
-        <li>Import/Export functionality</li>
-      </ul>
-    </div>
+
+  <div style="padding: 20px; background-color: #e8f5e9; border-radius: 10px; border-left: 4px solid #4caf50;">
+    <h3>📚 Book Management</h3>
+    <ul>
+      <li>Comprehensive catalog system</li>
+      <li>Advanced search & filtering</li>
+      <li>Bulk operations support</li>
+      <li>Import/Export functionality</li>
+    </ul>
   </div>
-  
-  <!-- Feature Card 3 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #7b1fa2, #9c27b0); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7.5v9l-4-2-4 2-4-2-4 2v-9l4-2 4 2 4-2 4 2z"/></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">Student Management</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Student registration system</li>
-        <li>Department organization</li>
-        <li>Contact information management</li>
-        <li>Status tracking</li>
-      </ul>
-    </div>
+
+  <div style="padding: 20px; background-color: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
+    <h3>👥 Student Management</h3>
+    <ul>
+      <li>Student registration system</li>
+      <li>Department organization</li>
+      <li>Contact information management</li>
+      <li>Status tracking</li>
+    </ul>
   </div>
-  
-  <!-- Feature Card 4 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #0097a7, #00bcd4); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">Issue/Return System</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Streamlined borrowing workflow</li>
-        <li>Due date management</li>
-        <li>Fine calculation</li>
-        <li>Quick return processing</li>
-      </ul>
-    </div>
+
+  <div style="padding: 20px; background-color: #ede7f6; border-radius: 10px; border-left: 4px solid #673ab7;">
+    <h3>🔄 Issue/Return System</h3>
+    <ul>
+      <li>Streamlined borrowing workflow</li>
+      <li>Due date management</li>
+      <li>Fine calculation</li>
+      <li>Quick return processing</li>
+    </ul>
   </div>
-  
-  <!-- Feature Card 5 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #e65100, #ff9800); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">WhatsApp Integration</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Automated notifications</li>
-        <li>Due date reminders</li>
-        <li>Overdue alerts</li>
-        <li>Batch message processing</li>
-      </ul>
-    </div>
+
+  <div style="padding: 20px; background-color: #fff3e0; border-radius: 10px; border-left: 4px solid #ff9800;">
+    <h3>📱 WhatsApp Integration</h3>
+    <ul>
+      <li>Automated notifications</li>
+      <li>Due date reminders</li>
+      <li>Overdue alerts</li>
+      <li>Batch message processing</li>
+    </ul>
   </div>
-  
-  <!-- Feature Card 6 -->
-  <div style="flex: 1; min-width: 280px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;">
-    <div style="padding: 15px; background: linear-gradient(135deg, #c2185b, #e91e63); color: white;">
-      <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="9" x2="9" y1="21" y2="9"></line></svg>
-        <h3 style="margin: 0 0 0 10px; font-size: 16px;">Analytics & Reporting</h3>
-      </div>
-    </div>
-    <div style="padding: 15px;">
-      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
-        <li>Detailed transaction reports</li>
-        <li>Usage statistics</li>
-        <li>Department-wise analysis</li>
-        <li>Custom report generation</li>
-      </ul>
-    </div>
+
+  <div style="padding: 20px; background-color: #fce4ec; border-radius: 10px; border-left: 4px solid #e91e63;">
+    <h3>📈 Analytics & Reporting</h3>
+    <ul>
+      <li>Detailed transaction reports</li>
+      <li>Usage statistics</li>
+      <li>Department-wise analysis</li>
+      <li>Custom report generation</li>
+    </ul>
   </div>
 </div>
 
 ## 🛠 Tech Stack
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px;">
-  <!-- Frontend Tech Stack -->
-  <div style="flex: 1; min-width: 300px; background: white; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); overflow: hidden;">
-    <div style="padding: 12px 15px; background: linear-gradient(to right, #007acc, #0098d5); color: white; display: flex; align-items: center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H8.7a1.
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 30px;">
+  <div style="padding: 20px; background-color: #f5f5f5; border-radius: 10px;">
+    <h3>Frontend</h3>
+    <table>
+      <tr>
+        <td><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" /></td>
+        <td>v18.3.1</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></td>
+        <td>v5.5.3</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" /></td>
+        <td>v5.4.2</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" /></td>
+        <td>v3.4.1</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white" alt="React Router" /></td>
+        <td>v6.22.3</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="padding: 20px; background-color: #f5f5f5; border-radius: 10px;">
+    <h3>Backend (Supabase)</h3>
+    <table>
+      <tr>
+        <td><img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" /></td>
+        <td>Database</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" /></td>
+        <td>Backend as a Service</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/Authentication-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white" alt="Authentication" /></td>
+        <td>User Management</td>
+      </tr>
+      <tr>
+        <td><img src="https://img.shields.io/badge/Row_Level_Security-FF6F00?style=for-the-badge&logo=firebase&logoColor=white" alt="Row Level Security" /></td>
+        <td>Data Protection</td>
+      </tr>
+    </table>
+  </div>
+</div>
 
 ## 💻 Getting Started
 
@@ -266,33 +248,12 @@ The Library Management System is a comprehensive solution designed to streamline
 
 ## 📱 Screenshots
 
-<div align="center">
-  <!-- Screenshot Carousel -->
-  <h3>📱 Application Screens</h3>
-  
-  <div style="max-width: 800px; margin: 0 auto; overflow: hidden; position: relative; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-    <!-- Main Image Display -->
-    <div style="width: 100%; display: flex; overflow-x: scroll; scroll-behavior: smooth; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 15px;">
-      <img id="slide-1" src="https://github.com/user-attachments/assets/b0845cff-c8a9-4794-a1db-94cee047cf65" style="width: 100%; flex-shrink: 0; scroll-snap-align: start; border-radius: 8px;" alt="Dashboard View" />
-      <img id="slide-2" src="https://github.com/user-attachments/assets/2dd4b814-fd29-4672-b4dd-db254f615274" style="width: 100%; flex-shrink: 0; scroll-snap-align: start; border-radius: 8px;" alt="Book Management" />
-      <img id="slide-3" src="https://github.com/user-attachments/assets/588f1237-823d-416e-a461-231b8238d459" style="width: 100%; flex-shrink: 0; scroll-snap-align: start; border-radius: 8px;" alt="Student Management" />
-      <img id="slide-4" src="https://github.com/user-attachments/assets/3c630441-84de-49d3-b87b-ab2dac435571" style="width: 100%; flex-shrink: 0; scroll-snap-align: start; border-radius: 8px;" alt="Issue/Return System" />
-      <img id="slide-5" src="https://github.com/user-attachments/assets/d1db6b0d-9d0d-4c82-a744-e1e91822ad39" style="width: 100%; flex-shrink: 0; scroll-snap-align: start; border-radius: 8px;" alt="Analytics Dashboard" />
-    </div>
-    
-    <!-- Thumbnail Navigation -->
-    <div style="display: flex; justify-content: center; margin-top: 10px; gap: 8px;">
-      <a href="#slide-1"><img src="https://github.com/user-attachments/assets/b0845cff-c8a9-4794-a1db-94cee047cf65" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 2px solid #3ECF8E; cursor: pointer;" alt="Thumb 1" /></a>
-      <a href="#slide-2"><img src="https://github.com/user-attachments/assets/2dd4b814-fd29-4672-b4dd-db254f615274" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 2px solid #ddd; cursor: pointer;" alt="Thumb 2" /></a>
-      <a href="#slide-3"><img src="https://github.com/user-attachments/assets/588f1237-823d-416e-a461-231b8238d459" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 2px solid #ddd; cursor: pointer;" alt="Thumb 3" /></a>
-      <a href="#slide-4"><img src="https://github.com/user-attachments/assets/3c630441-84de-49d3-b87b-ab2dac435571" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 2px solid #ddd; cursor: pointer;" alt="Thumb 4" /></a>
-      <a href="#slide-5"><img src="https://github.com/user-attachments/assets/d1db6b0d-9d0d-4c82-a744-e1e91822ad39" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 2px solid #ddd; cursor: pointer;" alt="Thumb 5" /></a>
-    </div>
-  </div>
-  
-  <p style="margin-top: 15px; font-style: italic; color: #666;">
-    Swipe or click thumbnails to navigate through screenshots
-  </p>
+<div align="center" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 30px 0;">
+  <img src="https://github.com/user-attachments/assets/b0845cff-c8a9-4794-a1db-94cee047cf65" style="border-radius: 8px; border: 1px solid #ddd;" alt="Dashboard" />
+  <img src="https://github.com/user-attachments/assets/2dd4b814-fd29-4672-b4dd-db254f615274" style="border-radius: 8px; border: 1px solid #ddd;" alt="Library Management" />
+  <img src="https://github.com/user-attachments/assets/588f1237-823d-416e-a461-231b8238d459" style="border-radius: 8px; border: 1px solid #ddd;" alt="Library Management" />
+  <img src="https://github.com/user-attachments/assets/3c630441-84de-49d3-b87b-ab2dac435571" style="border-radius: 8px; border: 1px solid #ddd;" alt="Library Management" />
+  <img src="https://github.com/user-attachments/assets/d1db6b0d-9d0d-4c82-a744-e1e91822ad39" style="border-radius: 8px; border: 1px solid #ddd;" alt="Library Management" />
 </div>
 
 ## 📦 Project Structure
