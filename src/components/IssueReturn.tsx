@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
- import { 
+import React, { useState, useEffect } from 'react';
+import { 
   BookUp, 
   BookDown, 
   Loader2, 
@@ -11,9 +11,12 @@ import { useState, useEffect } from 'react';
   X,
   Info,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Phone,
+  Mail,
+  MapPin
 } from 'lucide-react';
-import { useBooks, useStudents, useTransactions } from '../hooks/useSupabase';
+import { useBooks, useTransactions, useStudents } from '../hooks/useSupabase';
 import { Book as BookType, Student } from '../types/database';
 import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
@@ -31,6 +34,7 @@ function IssueReturn() {
   const [dueDate, setDueDate] = useState('');
   const [defaultReturnDays, setDefaultReturnDays] = useState(15);
   const [loadingSettings, setLoadingSettings] = useState(true);
+  const [studentDetails, setStudentDetails] = useState<Student | null>(null);
 
   useEffect(() => {
     fetchSettings();
@@ -42,6 +46,42 @@ function IssueReturn() {
     date.setDate(date.getDate() + defaultReturnDays);
     setDueDate(date.toISOString().split('T')[0]);
   }, [defaultReturnDays]);
+
+  // New effect to fetch student details when a book is selected in return mode
+  useEffect(() => {
+    if (!isIssuing && selectedBook) {
+      fetchStudentDetails();
+    }
+  }, [selectedBook, isIssuing]);
+
+  const fetchStudentDetails = async () => {
+    if (!selectedBook) return;
+
+    try {
+      const { data: activeTransaction, error: fetchError } = await supabase
+        .from('transactions')
+        .select(`
+          *,
+          student:students(*)
+        `)
+        .eq('book_id', selectedBook.id)
+        .eq('status', 'Borrowed')
+        .order('borrowed_date', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (fetchError) {
+        console.error('Error fetching transaction:', fetchError);
+        return;
+      }
+
+      if (activeTransaction) {
+        setStudentDetails(activeTransaction.student);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const fetchSettings = async () => {
     try {
@@ -90,6 +130,7 @@ function IssueReturn() {
     setSelectedStudent(null);
     setBookSearchQuery('');
     setStudentSearchQuery('');
+    setStudentDetails(null);
   }, [isIssuing]);
 
   const handleIssueBook = async () => {
@@ -131,7 +172,10 @@ function IssueReturn() {
     try {
       const { data: activeTransaction, error: fetchError } = await supabase
         .from('transactions')
-        .select('*')
+        .select(`
+          *,
+          student:students(*)
+        `)
         .eq('book_id', selectedBook.id)
         .eq('status', 'Borrowed')
         .order('borrowed_date', { ascending: false })
@@ -143,13 +187,6 @@ function IssueReturn() {
         return;
       }
 
-      // Get student name for the success message
-      const { data: studentData } = await supabase
-        .from('students')
-        .select('name')
-        .eq('id', activeTransaction.student_id)
-        .single();
-
       await addTransaction({
         book_id: selectedBook.id,
         student_id: activeTransaction.student_id,
@@ -160,10 +197,11 @@ function IssueReturn() {
       });
 
       await updateBook(selectedBook.id, { is_available: true });
-      toast.success(`"${selectedBook.name}" returned successfully${studentData ? ` from ${studentData.name}` : ''}`);
+      toast.success(`"${selectedBook.name}" returned successfully`);
       
-      // Reset selection
+      // Reset selections
       setSelectedBook(null);
+      setStudentDetails(null);
     } catch (error) {
       console.error('Error:', error);
       toast.error('Error returning book. Please try again.');
@@ -434,32 +472,68 @@ function IssueReturn() {
               </p>
               
               {selectedBook ? (
-                <div className="w-full p-5 rounded-lg bg-emerald-50 text-left">
-                  <h4 className="text-sm font-medium text-emerald-800 mb-4 flex items-center gap-2">
-                    <Info className="h-4 w-4 text-emerald-600" />
-                    Selected Book Details
-                  </h4>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
-                      <span className="w-20 text-emerald-700">Title:</span>
-                      <span className="font-medium text-gray-900">{selectedBook.name}</span>
-                    </div>
-                    <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
-                      <span className="w-20 text-emerald-700">Author:</span>
-                      <span className="text-gray-700">{selectedBook.author}</span>
-                    </div>
-                    <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
-                      <span className="w-20 text-emerald-700">Access No:</span>
-                      <span className="text-gray-700">{selectedBook.isbn}</span>
-                    </div>
-                    
-                    <div className="flex items-center mt-4 pt-2">
-                      <AlertCircle className="h-4 w-4 text-amber-500 mr-2" />
-                      <span className="text-sm text-amber-700">
-                        This will mark the book as available in inventory
-                      </span>
+                <div className="w-full space-y-6">
+                  <div className="p-5 rounded-lg bg-emerald-50 text-left">
+                    <h4 className="text-sm font-medium text-emerald-800 mb-4 flex items-center gap-2">
+                      <Info className="h-4 w-4 text-emerald-600" />
+                      Selected Book Details
+                    </h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
+                        <span className="w-20 text-emerald-700">Title:</span>
+                        <span className="font-medium text-gray-900">{selectedBook.name}</span>
+                      </div>
+                      <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
+                        <span className="w-20 text-emerald-700">Author:</span>
+                        <span className="text-gray-700">{selectedBook.author}</span>
+                      </div>
+                      <div className="flex items-start gap-2 pb-2 border-b border-emerald-100">
+                        <span className="w-20 text-emerald-700">Access No:</span>
+                        <span className="text-gray-700">{selectedBook.isbn}</span>
+                      </div>
                     </div>
                   </div>
+
+                  {studentDetails && (
+                    <div className="p-5 rounded-lg bg-gray-50">
+                      <h4 className="text-sm font-medium text-gray-800 mb-4 flex items-center gap-2">
+                        <User className="h-4 w-4 text-gray-600" />
+                        Student Details
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-gray-900">
+                              {studentDetails.name}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {studentDetails.reg_number}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 mt-4">
+                          <div className="flex items-center text-sm text-gray-600">
+                            <MapPin className="h-4 w-4 mr-2" />
+                            {studentDetails.department}, Section {studentDetails.section}
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Phone className="h-4 w-4 mr-2" />
+                            {studentDetails.contact_number}
+                          </div>
+                          {studentDetails.email && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Mail className="h-4 w-4 mr-2" />
+                              {studentDetails.email}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="w-full p-5 rounded-lg bg-emerald-50 flex items-center justify-center">

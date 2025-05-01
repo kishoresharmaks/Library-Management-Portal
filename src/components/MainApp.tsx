@@ -12,7 +12,8 @@ import {
   AlertCircle,
   MessageSquare,
   ChevronRight,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Clock
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useIdleTimer } from '../hooks/useIdleTimer';
@@ -28,6 +29,7 @@ const Overdue = lazy(() => import('./Overdue'));
 const WhatsAppNotifications = lazy(() => import('./WhatsAppNotifications'));
 const StaffTransactions = lazy(() => import('./StaffTransactions'));
 const Settings = lazy(() => import('./Settings'));
+const UpcomingReturns = lazy(() => import('./UpcomingReturns'));
 
 // Loader component
 const LoadingFallback = () => (
@@ -75,6 +77,7 @@ function MainApp() {
     { id: 'issue-return', name: 'Issue/Return Books', icon: BookUp },
     { id: 'staff-issue-return', name: 'Staff Issue/Return', icon: BookUp },
     { id: 'transactions', name: 'Transactions', icon: RepeatIcon },
+    { id: 'upcoming-returns', name: 'Upcoming Returns', icon: Clock },
     { id: 'overdue', name: 'Overdue Books', icon: AlertCircle },
     { id: 'whatsapp', name: 'WhatsApp Notifications', icon: MessageSquare },
     { id: 'settings', name: 'Settings', icon: SettingsIcon },
@@ -110,6 +113,7 @@ function MainApp() {
       'issue-return': () => import('./IssueReturn'),
       'staff-issue-return': () => import('./StaffTransactions'),
       'transactions': () => import('./Transactions'),
+      'upcoming-returns': () => import('./UpcomingReturns'),
       'overdue': () => import('./Overdue'),
       'whatsapp': () => import('./WhatsAppNotifications'),
       'settings': () => import('./Settings')
@@ -142,6 +146,8 @@ function MainApp() {
         return <StaffTransactions />;
       case 'transactions':
         return <Transactions />;
+      case 'upcoming-returns':
+        return <UpcomingReturns />;
       case 'overdue':
         return <Overdue />;
       case 'whatsapp':

@@ -11,10 +11,12 @@ import {
   BookOpen,
   Bookmark,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  MessageSquare
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Book as BookType } from '../types/database';
+import { RenewalChatbot } from './RenewalChatbot';
 
 function PublicBooks() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -28,6 +30,7 @@ function PublicBooks() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [showChatbot, setShowChatbot] = useState(false);
   const searchTimeoutRef = useRef<number>();
   const supabaseSubscription = useRef<any>(null);
 
@@ -123,7 +126,6 @@ function PublicBooks() {
       author: string; 
       count: number; 
       isbnList: string[];
-
     }>);
 
     return Object.values(groups)
@@ -153,7 +155,6 @@ function PublicBooks() {
   const stats = useMemo(() => ({
     totalBooks: books.length,
     uniqueTitles: groupedBooks.length,
- 
   }), [books, groupedBooks]);
 
   // Pagination
@@ -167,6 +168,15 @@ function PublicBooks() {
     setCurrentPage(Math.min(Math.max(1, page), totalPages));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const renderChatbotButton = () => (
+    <button
+      onClick={() => setShowChatbot(true)}
+      className="fixed bottom-4 right-4 bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition-colors"
+    >
+      <MessageSquare className="h-6 w-6" />
+    </button>
+  );
 
   if (loading) {
     return (
@@ -213,30 +223,6 @@ function PublicBooks() {
               </div>
             </div>
           </div>
-          {/* <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 backdrop-blur-sm bg-white/50">
-            <div className="flex items-center">
-              <div className="p-3 bg-emerald-50 rounded-full mr-4">
-                <BookOpen className="h-6 w-6 text-emerald-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">Unique Titles</p>
-                <p className="text-2xl font-bold text-emerald-600">{stats.uniqueTitles}</p>
-              </div>
-            </div>
-          </div> */}
-          {/* <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 backdrop-blur-sm bg-white/50">
-            <div className="flex items-center">
-              <div className="p-3 bg-purple-50 rounded-full mr-4">
-                <Bookmark className="h-6 w-6 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">Departments</p>
-                <p className="text-2xl font-bold text-purple-600">
-                  {Object.keys(stats.departments).length}
-                </p>
-              </div>
-            </div>
-          </div> */}
         </div>
 
         {/* Search & Filters */}
@@ -376,7 +362,6 @@ function PublicBooks() {
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             {group.count} {group.count === 1 ? 'copy' : 'copies'}
                           </span>
-                         
                         </div>
                         <div className="text-xs text-gray-500">
                           <p className="font-medium mb-1">Access Numbers:</p>
@@ -481,6 +466,8 @@ function PublicBooks() {
           </>
         )}
       </div>
+      {!showChatbot && renderChatbotButton()}
+      {showChatbot && <RenewalChatbot onClose={() => setShowChatbot(false)} />}
     </div>
   );
 }

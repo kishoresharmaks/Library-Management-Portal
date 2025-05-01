@@ -157,7 +157,7 @@ function Dashboard() {
           icon={BookCopy}
           color="bg-blue-600"
           subtext={`${stats.availableBooks} available`}
-          trend={{ value: 5, positive: true }}
+          // trend={{ value: 5, positive: true }}
         />
         <StatCard
           title="Available Books"
@@ -165,7 +165,7 @@ function Dashboard() {
           icon={BookOpen}
           color="bg-emerald-600"
           subtext="Ready to borrow"
-          trend={{ value: 3, positive: true }}
+          // trend={{ value: 3, positive: true }}
         />
         <StatCard
           title="Borrowed Books"
@@ -180,7 +180,7 @@ function Dashboard() {
           icon={Clock}
           color="bg-red-600"
           subtext="Need attention"
-          trend={{ value: 12, positive: false }}
+          // trend={{ value: 12, positive: false }}
         />
       </div>
 
@@ -219,7 +219,7 @@ function Dashboard() {
 
         {/* Department Distribution */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Department Distribution</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Department Wise Student Count</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <RechartsBarChart data={stats.departmentData}>
@@ -245,7 +245,7 @@ function Dashboard() {
                   cy="50%"
                   labelLine={false}
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
                 >
