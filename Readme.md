@@ -1,7 +1,7 @@
 # 📚 Library Management System
 
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200&auto=format&fit=crop&q=90" width="100%" alt="Library Management System">
+  <img src="https://github.com/user-attachments/assets/23816407-1924-4f94-b4b6-d53b6d298035" width="100%" alt="Library Management System">
 
   ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
   ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
