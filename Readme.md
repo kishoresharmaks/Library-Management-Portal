@@ -17,9 +17,10 @@
     <br />
     <a href="#-demo">View Demo</a>
     ·
-    <a href="https://github.com/yourusername/library-management/issues">Report Bug</a>
+    <a href="https://github.com/kishoresharmaks/Library-Management-Portal/issues">Report Bug</a>
     ·
-    <a href="https://github.com/yourusername/library-management/issues">Request Feature</a>
+    
+    <a href="https://github.com/kishoresharmaks/Library-Management-Portal/issues">Request Feature</a>
   </p>
 </div>
 
@@ -118,8 +119,8 @@ The Library Management System is a comprehensive solution designed to streamline
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/library-management.git
-   cd library-management
+   git clone https://github.com/kishoresharmaks/Library-Management-Portal.git
+   cd Library-Management-Portal
    ```
 
 2. Install dependencies
@@ -222,9 +223,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Your Name - Kishoresharma 
+krishkishoreks@gmail.com
 
-Project Link: [https://github.com/yourusername/library-management](https://github.com/yourusername/library-management)
+Project Link: [Library-Management-Portal](https://github.com/kishoresharmaks/Library-Management-Portal)
 
 ## 🙏 Acknowledgments
 
