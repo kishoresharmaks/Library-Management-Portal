@@ -20,7 +20,7 @@
     <a href="https://github.com/kishoresharmaks/Library-Management-Portal/issues">Report Bug</a>
     ·
     
-    <a href="https://github.com/kishoresharmaks/Library-Management-Portal/issues">Request Feature</a>
+  <a href="https://github.com/kishoresharmaks/Library-Management-Portal/issues">Request Feature</a>
   </p>
 </div>
 
