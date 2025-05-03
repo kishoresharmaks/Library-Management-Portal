@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, BookOpen, LogIn, AlertCircle } from 'lucide-react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Head from 'next/head'; // If using Next.js, or your framework's equivalent
+import Head from 'next/head';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -29,13 +29,11 @@ function LoginPage() {
   // Validate password strength
   const validatePassword = (pwd: string) => {
     const minLength = 8;
-    // const hasUpper = /[A-Z]/.test(pwd);
     const hasLower = /[a-z]/.test(pwd);
     const hasNumber = /\d/.test(pwd);
     const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
     
     if (pwd.length < minLength) return 'Password must be at least 8 characters';
-    // if (!hasUpper) return 'Include at least one uppercase letter';
     if (!hasLower) return 'Include at least one lowercase letter';
     if (!hasNumber) return 'Include at least one number';
     if (!hasSpecial) return 'Include at least one special character';
@@ -53,7 +51,7 @@ function LoginPage() {
     
     if (emailErr || pwdErr) return;
     if (!captchaVerified) {
-      alert('Please complete the CAPTCHA verification');
+      toast.error('Please complete the CAPTCHA verification');
       return;
     }
     
@@ -62,7 +60,7 @@ function LoginPage() {
       const now = new Date();
       const lockTime = new Date(lastAttempt.getTime() + 5 * 60000); // 5 minutes
       if (now < lockTime) {
-        alert(`Account temporarily locked. Try again at ${lockTime.toLocaleTimeString()}`);
+        toast.error(`Account temporarily locked. Try again at ${lockTime.toLocaleTimeString()}`);
         return;
       } else {
         setIsLocked(false);
@@ -72,7 +70,6 @@ function LoginPage() {
 
     setIsLoading(true);
     try {
-      // Pass rememberMe to auth service
       await signIn(email, password, rememberMe);
       setAttempts(0);
     } catch (error) {
@@ -81,7 +78,7 @@ function LoginPage() {
       if (newAttempts >= 5) {
         setIsLocked(true);
         setLastAttempt(new Date());
-        alert('Too many failed attempts. Account locked for 5 minutes.');
+        toast.error('Too many failed attempts. Account locked for 5 minutes.');
       }
       console.error('Login failed:', error);
     } finally {
@@ -92,40 +89,45 @@ function LoginPage() {
   return (
     <>
       <Head>
-        {/* Security Headers */}
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'" />
-        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
-        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com; connect-src 'self'" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="flex justify-center">
-            {/* Logo Image */}
-            {/* <img 
-              src="https://i.ibb.co/WpzS5cwm/library-it-sona.jpg" 
-              alt="Library IT Sona Logo" 
-              className="h-20 w-auto mb-4"
-            /> */}
-          </div>
-          <h2 className="mt-4 text-center text-3xl font-extrabold text-gray-900">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Please sign in to your account to continue
-          </p>
-        </div>
+      <div 
+        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2000&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        
+        <div className="relative w-full max-w-md px-6 py-12 sm:px-0">
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-8 space-y-8 w-full">
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <div className="p-3 bg-blue-600 rounded-2xl">
+                  <BookOpen className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Welcome Back
+              </h2>
+              <p className="mt-2 text-sm text-gray-600">
+                Sign in to access the library management system
+              </p>
+            </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-lg sm:rounded-xl sm:px-10 border border-gray-100">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-gray-400" />
                   </div>
@@ -133,25 +135,32 @@ function LoginPage() {
                     id="email"
                     name="email"
                     type="email"
-                    autoComplete="username email"
+                    autoComplete="email"
                     required
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
                       setEmailError(validateEmail(e.target.value));
                     }}
-                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className={`block w-full pl-10 pr-3 py-3 border ${
+                      emailError ? 'border-red-300' : 'border-gray-300'
+                    } rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                     placeholder="you@example.com"
                   />
                 </div>
-                {emailError && <p className="mt-1 text-sm text-red-600">{emailError}</p>}
+                {emailError && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center">
+                    <AlertCircle className="h-4 w-4 mr-1" />
+                    {emailError}
+                  </p>
+                )}
               </div>
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-gray-400" />
                   </div>
@@ -166,25 +175,29 @@ function LoginPage() {
                       setPassword(e.target.value);
                       setPasswordError(validatePassword(e.target.value));
                     }}
-                    className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className={`block w-full pl-10 pr-10 py-3 border ${
+                      passwordError ? 'border-red-300' : 'border-gray-300'
+                    } rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                     placeholder="••••••••"
                   />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    ) : (
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    )}
+                  </button>
                 </div>
-                {passwordError && <p className="mt-1 text-sm text-red-600">{passwordError}</p>}
+                {passwordError && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center">
+                    <AlertCircle className="h-4 w-4 mr-1" />
+                    {passwordError}
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -201,47 +214,52 @@ function LoginPage() {
                     Remember me
                   </label>
                 </div>
-
-                {/* <div className="text-sm">
-                  <a href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
-                    Forgot your password?
-                  </a>
-                </div> */}
               </div>
 
               <div className="mt-4">
                 <ReCAPTCHA
                   sitekey="6LcYtSorAAAAAL8wEEDnYGqZD1kglFH1U90dS7yb"
                   onChange={(value) => setCaptchaVerified(!!value)}
+                  className="transform scale-90 -ml-2"
                 />
               </div>
 
-              <div>
-                <button
-                  type="submit"
-                  disabled={isLoading || isLocked}
-                  className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ease-in-out ${(isLoading || isLocked) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {isLoading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Signing in...
-                    </>
-                  ) : isLocked ? (
-                    "Account Locked"
-                  ) : (
-                    "Sign in"
-                  )}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={isLoading || isLocked}
+                className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 ${
+                  (isLoading || isLocked) ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
+                    Signing in...
+                  </>
+                ) : isLocked ? (
+                  <>
+                    <Lock className="h-5 w-5 mr-2" />
+                    Account Locked
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Sign in
+                  </>
+                )}
+              </button>
+
+              {isLocked && lastAttempt && (
+                <div className="mt-4 p-4 bg-red-50 rounded-xl border border-red-200">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
+                    <p className="text-sm text-red-600">
+                      Account locked until {new Date(lastAttempt.getTime() + 5 * 60000).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              )}
             </form>
-
-           
-
-             
           </div>
         </div>
       </div>
@@ -251,4 +269,3 @@ function LoginPage() {
 
 export default LoginPage;
 
- 

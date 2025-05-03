@@ -87,8 +87,12 @@ function StaffTransactions() {
           .insert({
             reg_number: staffId,
             name: staffName,
+            department: 'Staff', // Always set department as "Staff"
             status: 'active',
-            contact_info: 'Staff Member'
+            contact_info: 'Staff Member',
+            section: 'Staff',
+            year: 1,
+            semester: 1
           })
           .select('id')
           .single();
